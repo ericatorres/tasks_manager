@@ -13,6 +13,48 @@ class Task extends StatefulWidget {
 
 class _TaskState extends State<Task> {
   int nivel = 0;
+  int multiplicarDificuldade = 10;
+  int numeroBarra = 1;
+  Color corBarra = Colors.blue;
+  Color barraDois = Colors.amber;
+  Color? barraTres = Colors.red[200];
+  Color barraQuatro = Colors.lightGreen;
+  Color? barraCinco = Colors.purple[300];
+  Color barraSeis = Colors.pink;
+  Color barraSete = Colors.black12;
+  Color barraOito = Colors.teal;
+
+  atualizaCorBarra() {
+    if (numeroBarra == 2) {
+      setState(() {
+        corBarra = barraDois;
+      });
+    } else if (numeroBarra == 3) {
+      setState(() {
+        corBarra = barraTres!;
+      });
+    } else if (numeroBarra == 4) {
+      setState(() {
+        corBarra = barraQuatro;
+      });
+    } else if (numeroBarra == 5) {
+      setState(() {
+        corBarra = barraCinco!;
+      });
+    } else if (numeroBarra == 6) {
+      setState(() {
+        corBarra = barraSeis;
+      });
+    } else if (numeroBarra == 7) {
+      setState(() {
+        corBarra = barraSete;
+      });
+    } else {
+      setState(() {
+        corBarra = barraOito;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +64,7 @@ class _TaskState extends State<Task> {
         children: [
           Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4), color: Colors.blue),
+                borderRadius: BorderRadius.circular(4), color: corBarra),
             height: 140,
           ),
           Column(
@@ -69,9 +111,24 @@ class _TaskState extends State<Task> {
                         width: 65,
                         child: ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              nivel++;
-                            });
+                            if (nivel ==
+                                widget.dificuldade * multiplicarDificuldade) {
+                              setState(() {
+                                multiplicarDificuldade =
+                                    multiplicarDificuldade * 2;
+                              });
+                              setState(() {
+                                numeroBarra++;
+                              });
+                              setState(() {
+                                nivel = 0;
+                              });
+                              atualizaCorBarra();
+                            } else {
+                              setState(() {
+                                nivel++;
+                              });
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -111,7 +168,7 @@ class _TaskState extends State<Task> {
                         child: LinearProgressIndicator(
                           color: Colors.white,
                           value: nivel /
-                              (10 *
+                              (multiplicarDificuldade *
                                   (widget.dificuldade > 0
                                       ? widget.dificuldade
                                       : 1)),
