@@ -1,16 +1,8 @@
-# primeiro_projeto
+# Gerenciador de tarefas
 
-A new Flutter project.
+Meu primeiro app utilizando o fluter.
 
-## Getting Started
+## Descrição
 
-This project is a starting point for a Flutter application.
+Esse projeto contém uma lista pre-cadastrada de habilidades que se deseja aprender, classificadas por dificuldade de aprendê-las e com a possibilidade de evoluir as habilidades ao clicar no botão "UP".
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
