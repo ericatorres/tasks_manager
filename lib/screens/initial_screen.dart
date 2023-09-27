@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:primeiro_projeto/components/task.dart';
+import 'package:primeiro_projeto/data/task_inherited.dart';
+import 'package:primeiro_projeto/screens/form_screen.dart';
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
@@ -9,42 +10,71 @@ class InitialScreen extends StatefulWidget {
 }
 
 class _InitialScreenState extends State<InitialScreen> {
-  bool opacidade = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
-        title: const Text('Tarefas'),
+        title: Column(
+          children: [
+            Container(
+              alignment: Alignment.topLeft,
+              child: const Text('Tarefas'),
+            ),
+            Container(
+              height: 35,
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 4.0),
+                    child: SizedBox(
+                        width: 150,
+                        child: LinearProgressIndicator(
+                          color: Colors.white,
+                          value: TaskInherited.of(context).globalLevel /
+                              (10 *
+                                  TaskInherited.of(context).dificuldadeGlobal),
+                        )),
+                  ),
+                  Text(
+                    'Nível ${TaskInherited.of(context).globalLevel.toStringAsFixed(2)}',
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    icon: const Icon(
+                      Icons.refresh_rounded,
+                      color: Colors.white,
+                    ),
+                    iconSize: 20,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
-      body: AnimatedOpacity(
-        opacity: opacidade ? 1 : 0,
-        duration: const Duration(milliseconds: 1000),
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: const [
-            Task('Aprender Flutter', 'assets/images/dash.png', 3),
-            Task('Andar de bicicleta', 'assets/images/bike.jpg', 2),
-            Task('Meditar', 'assets/images/meditar.jpeg', 5),
-            Task('Ler', 'assets/images/ler.jpg', 1),
-            SizedBox(
-              height: 80,
-            )
-          ],
-        ),
+      body: ListView(
+        scrollDirection: Axis.vertical,
+        children: TaskInherited.of(context).taskList,
+        padding: EdgeInsets.only(top: 8, bottom: 70),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(() {
-            opacidade = !opacidade;
-          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => FormScreen(taskContext: context),
+            ),
+          );
         },
         backgroundColor: Colors.blue[200],
         foregroundColor: Colors.white,
-        child: const Icon(Icons.remove_red_eye),
+        child: const Icon(Icons.add),
       ),
     );
   }

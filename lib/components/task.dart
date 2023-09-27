@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:primeiro_projeto/components/difficulty.dart';
+import 'package:primeiro_projeto/data/task_inherited.dart';
 
 class Task extends StatefulWidget {
   final String nome;
   final String foto;
   final int dificuldade;
-  const Task(this.nome, this.foto, this.dificuldade, {super.key});
+
+  Task(this.nome, this.foto, this.dificuldade, {super.key});
+
+  int nivel = 0;
 
   @override
   State<Task> createState() => _TaskState();
 }
 
 class _TaskState extends State<Task> {
-  int nivel = 0;
+  bool assetOrNetwork() {
+    if (widget.foto.contains('http')) {
+      return false;
+    }
+    return true;
+  }
+
   int multiplicarDificuldade = 10;
   int numeroBarra = 1;
   Color corBarra = Colors.blue;
@@ -85,10 +95,15 @@ class _TaskState extends State<Task> {
                       height: 100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: Image.asset(
-                          widget.foto,
-                          fit: BoxFit.cover,
-                        ),
+                        child: assetOrNetwork()
+                            ? Image.asset(
+                                widget.foto,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                widget.foto,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                     Column(
@@ -111,7 +126,7 @@ class _TaskState extends State<Task> {
                         width: 65,
                         child: ElevatedButton(
                           onPressed: () {
-                            if (nivel ==
+                            if (widget.nivel ==
                                 widget.dificuldade * multiplicarDificuldade) {
                               setState(() {
                                 multiplicarDificuldade =
@@ -121,14 +136,16 @@ class _TaskState extends State<Task> {
                                 numeroBarra++;
                               });
                               setState(() {
-                                nivel = 0;
+                                widget.nivel = 0;
                               });
                               atualizaCorBarra();
                             } else {
                               setState(() {
-                                nivel++;
+                                widget.nivel++;
                               });
                             }
+                            TaskInherited.of(context).alteraGlobalLevel(
+                                widget.nivel, widget.dificuldade);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -167,7 +184,7 @@ class _TaskState extends State<Task> {
                         width: 200,
                         child: LinearProgressIndicator(
                           color: Colors.white,
-                          value: nivel /
+                          value: widget.nivel /
                               (multiplicarDificuldade *
                                   (widget.dificuldade > 0
                                       ? widget.dificuldade
@@ -177,7 +194,7 @@ class _TaskState extends State<Task> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      'Nível $nivel',
+                      'Nível ${widget.nivel}',
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
